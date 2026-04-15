@@ -1,73 +1,150 @@
-# React + TypeScript + Vite
+# Skipark
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Skipark is a web app built with React, Vite, Firebase, and Cloud Functions. It combines a personal ski park, Strava-backed activity syncing, weather lookups, and an AI-assisted "Ask Bjorn" flow, that aids the user in keeping track of their ski park.
 
-Currently, two official plugins are available:
+## Current Scope
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+The app currently includes:
 
-## React Compiler
+- Google sign-in with Firebase Authentication
+- Personal ski park storage in Firestore
+- Strava OAuth and Nordic activity sync through Firebase Functions
+- Weather lookups via backend integrations
+- "Ask Bjorn" backend logic powered by Gemini
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Routes currently wired in the frontend:
 
-## Expanding the ESLint configuration
+- `/` home
+- `/sign-in`
+- `/ask-bjorn`
+- `/park`
+- `/statistics`
+- `/ski-tests`
+- `/profile`
+- `/strava/callback`
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Tech Stack
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- React 19
+- TypeScript
+- Vite
+- Firebase Authentication
+- Cloud Firestore
+- Firebase Hosting
+- Firebase Functions v2
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## Project Structure
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```text
+.
+├── src/                 Frontend app
+├── functions/           Firebase Cloud Functions
+├── firebase.json        Firebase hosting, functions, firestore, emulators
+├── .firebaserc          Default Firebase project mapping
+└── package.json         Frontend scripts
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Requirements
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+- Node.js 22 for `functions/`
+- npm
+- Firebase CLI
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Local Development
+
+Install dependencies:
+
+```bash
+npm install
+cd functions && npm install
 ```
+
+Start the frontend dev server:
+
+```bash
+npm run dev
+```
+
+Useful emulator commands from the repo root:
+
+```bash
+npm run emulators
+npm run emulators:hosting
+npm run emulators:strava
+npm run emulators:strava:isolated
+```
+
+## Environment Variables
+
+Frontend local env files such as `.env.local` and `.env.development.local` are ignored by Git.
+
+Backend local secrets should live in `functions/.env.local`. An example file already exists at [functions/.env.example](/Users/henrikaas/Library/CloudStorage/OneDrive-NTNU/Dokumenter/Orientering/Skipark/functions/.env.example).
+
+Expected backend variables:
+
+```env
+STRAVA_CLIENT_ID=
+STRAVA_CLIENT_SECRET=
+STRAVA_REDIRECT_URI=
+STRAVA_STATE_SECRET=
+FRONTEND_URL=http://localhost:5173
+STRAVA_SCOPE=read,activity:read_all
+GEMINI_API_KEY=
+GEMINI_MODEL=gemini-2.5-flash
+```
+
+Optional frontend variables used by the app:
+
+```env
+VITE_STRAVA_API_BASE=/api/strava
+VITE_USE_FIRESTORE_EMULATOR=true
+```
+
+## Security Notes
+
+- Do not commit `.env.local`, `.env.development.local`, or `functions/.env.local`
+- Do not hardcode backend secrets into source files
+- The Firebase web config in `src/firebase.ts` is client config, not a server secret
+
+## Scripts
+
+Frontend scripts from [package.json](/Users/henrikaas/Library/CloudStorage/OneDrive-NTNU/Dokumenter/Orientering/Skipark/package.json):
+
+```bash
+npm run dev
+npm run build
+npm run lint
+npm run preview
+```
+
+Functions script from [functions/package.json](/Users/henrikaas/Library/CloudStorage/OneDrive-NTNU/Dokumenter/Orientering/Skipark/functions/package.json):
+
+```bash
+cd functions
+npm run serve
+npm run deploy
+```
+
+## Firebase
+
+This repo is configured for the Firebase project `skipark-5f8bf` in [.firebaserc](/Users/henrikaas/Library/CloudStorage/OneDrive-NTNU/Dokumenter/Orientering/Skipark/.firebaserc).
+
+`firebase.json` currently defines:
+
+- Functions source in `functions/`
+- Firestore rules
+- Hosting from `dist/`
+- Rewrites for `/api/strava/**` to the `stravaApi` function
+
+## Push Checklist
+
+Before pushing the repo:
+
+- Confirm no local env files are staged
+- Confirm `node_modules/` and `dist/` are not staged
+- Review `git status --short`
+- Make the first commit and add the GitHub remote
+
+## Status
+
+This is an active project. Some routes are implemented as placeholders, but the core app structure, auth setup, Firebase wiring, and backend integrations are already in place.
