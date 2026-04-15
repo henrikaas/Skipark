@@ -1,0 +1,131 @@
+.lede {
+  max-width: 28rem;
+  margin: 0;
+}
+
+.meta {
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.meta code {
+  font-size: 0.9em;
+}
+
+.auth-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  max-width: 22rem;
+}
+
+.auth-panel.signed-in {
+  gap: 0.5rem;
+}
+
+.avatar {
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--border);
+}
+
+.avatar--sm {
+  width: 36px;
+  height: 36px;
+}
+
+.avatar-placeholder {
+  width: 80px;
+  height: 80px;
+  background: var(--code-bg);
+}
+
+.avatar-placeholder.avatar--sm {
+  width: 36px;
+  height: 36px;
+}
+
+.user-name {
+  margin: 0.25rem 0 0;
+  font-size: 1.125rem;
+  font-weight: 500;
+  color: var(--text-h);
+}
+
+.user-email {
+  margin: 0 0 0.75rem;
+  font-size: 0.95rem;
+  color: var(--text);
+}
+
+.btn {
+  font: inherit;
+  cursor: pointer;
+  border-radius: 8px;
+  padding: 0.65rem 1.25rem;
+  border: 2px solid transparent;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s,
+    background 0.2s;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.btn.primary {
+  color: var(--text-h);
+  background: var(--accent-bg);
+  border-color: var(--accent-border);
+}
+
+.btn.primary:hover {
+  box-shadow: var(--shadow);
+}
+
+.btn.secondary {
+  color: var(--text-h);
+  background: var(--social-bg);
+  border-color: var(--border);
+}
+
+.btn.secondary:hover {
+  border-color: var(--accent-border);
+}
+
+.btn.ghost {
+  color: var(--text-h);
+  background: transparent;
+  border-color: transparent;
+}
+
+.btn.ghost:hover {
+  border-color: var(--border);
+  background: var(--social-bg);
+}
+
+.btn.small {
+  padding: 0.45rem 0.85rem;
+  font-size: 0.9rem;
+}
+
+.auth-error {
+  margin: 0;
+  max-width: 28rem;
+  font-size: 0.9rem;
+  color: #b91c1c;
+}
+
+@media (prefers-color-scheme: dark) {
+  .auth-error {
+    color: #fca5a5;
+  }
+}
